@@ -1,14 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.awt.*;
 
 public class GUI implements ActionListener {
 
@@ -37,18 +33,20 @@ public class GUI implements ActionListener {
         frame.setTitle("MotorPH Portal");
         frame.setSize(350, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.add(panel);
 
-        panel.setLayout(null);
+        panel.setLayout(new GridLayout(3, 1, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JButton empChoiceButton = new JButton("Log in as Employee");
-        empChoiceButton.setBounds(50, 50, 200, 25);
+        empChoiceButton.setFont(new Font("Arial", Font.PLAIN, 16));
         empChoiceButton.addActionListener(e -> showLoginScreen(false));
         panel.add(empChoiceButton);
 
         JButton hrChoiceButton = new JButton("Log in as HR");
-        hrChoiceButton.setBounds(50, 100, 200, 25);
+        hrChoiceButton.setFont(new Font("Arial", Font.PLAIN, 16));
         hrChoiceButton.addActionListener(e -> showLoginScreen(true));
         panel.add(hrChoiceButton);
     }
@@ -62,46 +60,40 @@ public class GUI implements ActionListener {
         frame.setTitle(isHR ? "HR Login" : "Employee Login");
         frame.setSize(350, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.add(panel);
 
-        panel.setLayout(null);
+        panel.setLayout(new GridLayout(4, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // EID Label and textbox
         eidLabel = new JLabel("ID");
-        eidLabel.setBounds(10, 20, 80, 25);
         panel.add(eidLabel);
 
         eidTextField = new JTextField(20);
-        eidTextField.setBounds(100, 20, 165, 25);
         panel.add(eidTextField);
 
-        // password Label
-        passLabel = new JLabel("PASSWORD");
-        passLabel.setBounds(10, 50, 80, 25);
+        // Password Label
+        passLabel = new JLabel("Password");
         panel.add(passLabel);
         
-        // password display (****)
+        // Password display (****)
         passTextField = new JPasswordField(20);
-        passTextField.setBounds(100, 50, 165, 25);
         panel.add(passTextField);
 
         // Log in Button
-        logButton = new JButton();
-        logButton.setBounds(10, 80, 100, 25);
-        logButton.setText("LOG IN");
+        logButton = new JButton("Log In");
         logButton.addActionListener(this);
         panel.add(logButton);
 
         // Back Button
-        backButton = new JButton();
-        backButton.setBounds(120, 80, 100, 25);
-        backButton.setText("BACK");
+        backButton = new JButton("Back");
         backButton.addActionListener(e -> showInitialChoice());
         panel.add(backButton);
 
         successloginJLabel = new JLabel("");
-        successloginJLabel.setBounds(10, 110, 300, 25);
+        successloginJLabel.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(successloginJLabel);
     }
 
@@ -114,6 +106,7 @@ public class GUI implements ActionListener {
 
             boolean authenticated = authenticate(user, password, isHRLogin);
             if (authenticated) {
+                frame.dispose();
                 if (isHRLogin) {
                     successloginJLabel.setText("HR Log in Success");
                     HRDashboard.openHRDashboard(user);
@@ -122,13 +115,13 @@ public class GUI implements ActionListener {
                     Dashboard.openDashboard(user); 
                 }
             } else {
-                successloginJLabel.setText("Invalid password!");
+                successloginJLabel.setText("Invalid ID or password!");
             }
         }
     }
 
     private boolean authenticate(String username, String password, boolean isHR) {
-        String csvFile = isHR ? "MS1 java gui\\lib\\HR Details.csv" : "MS1 java gui\\lib\\Employee information - Employee Details.csv";
+        String csvFile = isHR ? "lib/HR Details.csv" : "lib/Employee_Database.csv";
         String line;
         String cvsSplitBy = ",";
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class SalaryCalculator {
 
-    private static final String CSV_FILE_PATH = "MS1 java gui\\lib\\Employee information - Employee Details.csv";
+    private static final String CSV_FILE_PATH = "lib\\Employee_Database.csv";
 
     public static double calculateWeeklySalary(String employeeId, double weeklyHoursWorked) {
         double hourlyRate = getHourlyRate(employeeId);
