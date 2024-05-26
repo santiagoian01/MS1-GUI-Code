@@ -10,9 +10,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-
-
-//Pa view ng lib-> username and password.csv to test yung username and passwords
 public class GUI implements ActionListener {
 
     private static JLabel eidLabel;
@@ -20,13 +17,49 @@ public class GUI implements ActionListener {
     private static JLabel passLabel;
     private static JPasswordField passTextField;
     private static JButton logButton;
+    private static JButton backButton;
     private static JLabel successloginJLabel;
-    
-    public static void main(String[] args){
+    private static JFrame frame;
+    private boolean isHRLogin = false;
 
+    public static void main(String[] args) {
+        GUI gui = new GUI();
+        gui.showInitialChoice();
+    }
+
+    public void showInitialChoice() {
+        if (frame != null) {
+            frame.dispose();
+        }
+        
+        frame = new JFrame();
         JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
-        frame.setTitle("MotorPH Employee Portal");
+        frame.setTitle("MotorPH Portal");
+        frame.setSize(350, 200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        frame.add(panel);
+
+        panel.setLayout(null);
+
+        JButton empChoiceButton = new JButton("Log in as Employee");
+        empChoiceButton.setBounds(50, 50, 200, 25);
+        empChoiceButton.addActionListener(e -> showLoginScreen(false));
+        panel.add(empChoiceButton);
+
+        JButton hrChoiceButton = new JButton("Log in as HR");
+        hrChoiceButton.setBounds(50, 100, 200, 25);
+        hrChoiceButton.addActionListener(e -> showLoginScreen(true));
+        panel.add(hrChoiceButton);
+    }
+
+    public void showLoginScreen(boolean isHR) {
+        isHRLogin = isHR;
+        frame.dispose();
+        
+        frame = new JFrame();
+        JPanel panel = new JPanel();
+        frame.setTitle(isHR ? "HR Login" : "Employee Login");
         frame.setSize(350, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -35,7 +68,7 @@ public class GUI implements ActionListener {
         panel.setLayout(null);
 
         // EID Label and textbox
-        eidLabel = new JLabel("EMPLOYEE ID");
+        eidLabel = new JLabel("ID");
         eidLabel.setBounds(10, 20, 80, 25);
         panel.add(eidLabel);
 
@@ -47,17 +80,25 @@ public class GUI implements ActionListener {
         passLabel = new JLabel("PASSWORD");
         passLabel.setBounds(10, 50, 80, 25);
         panel.add(passLabel);
+        
         // password display (****)
         passTextField = new JPasswordField(20);
         passTextField.setBounds(100, 50, 165, 25);
         panel.add(passTextField);
 
-        //Log in Button
+        // Log in Button
         logButton = new JButton();
-        logButton.setBounds(10, 80, 80, 25);
+        logButton.setBounds(10, 80, 100, 25);
         logButton.setText("LOG IN");
-        logButton.addActionListener(new GUI());
+        logButton.addActionListener(this);
         panel.add(logButton);
+
+        // Back Button
+        backButton = new JButton();
+        backButton.setBounds(120, 80, 100, 25);
+        backButton.setText("BACK");
+        backButton.addActionListener(e -> showInitialChoice());
+        panel.add(backButton);
 
         successloginJLabel = new JLabel("");
         successloginJLabel.setBounds(10, 110, 300, 25);
@@ -66,22 +107,28 @@ public class GUI implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String user = eidTextField.getText();
-        char[] charpassword = passTextField.getPassword();
-        String password = new String(charpassword); // Converts char to string
+        if (e.getSource() == logButton) {
+            String user = eidTextField.getText();
+            char[] charpassword = passTextField.getPassword();
+            String password = new String(charpassword); // Converts char to string
 
-        boolean authenticated = authenticate(user, password);
-        if (authenticated) {
-            successloginJLabel.setText("Log in Success"); 
-            Dashboard.openDashboard(user); // Pass EID to openDashboard
-        } else {
-            successloginJLabel.setText("Invalid password!");
-            // Invalid Auth
+            boolean authenticated = authenticate(user, password, isHRLogin);
+            if (authenticated) {
+                if (isHRLogin) {
+                    successloginJLabel.setText("HR Log in Success");
+                    HRDashboard.openHRDashboard(user);
+                } else {
+                    successloginJLabel.setText("Employee Log in Success");
+                    Dashboard.openDashboard(user); 
+                }
+            } else {
+                successloginJLabel.setText("Invalid password!");
+            }
         }
     }
 
-    private boolean authenticate(String username, String password) {
-        String csvFile = "lib\\username and password.csv";
+    private boolean authenticate(String username, String password, boolean isHR) {
+        String csvFile = isHR ? "MS1 java gui\\lib\\HR Details.csv" : "MS1 java gui\\lib\\Employee information - Employee Details.csv";
         String line;
         String cvsSplitBy = ",";
 

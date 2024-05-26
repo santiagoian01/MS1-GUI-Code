@@ -46,7 +46,7 @@ public class Profile {
 
     private static String[] getEmployeeProfile(String eid) {
          String[] profileInfo = new String[21]; 
-        String csvFile = "lib\\Employee information - Employee Details.csv"; 
+        String csvFile = "MS1 java gui\\lib\\Employee information - Employee Details.csv"; 
         String line;
         String cvsSplitBy = ",";
     
