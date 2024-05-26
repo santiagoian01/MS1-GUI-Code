@@ -30,10 +30,10 @@ HR Side:
 
 
 Members
-Gracielle Salvador
-Ian Federico Santiago
-James Earl Teriales
+- Gracielle Salvador
+- Ian Federico Santiago
+- James Earl Teriales
 
 
 Professor
-Jezreel Rodriguez
+- Jezreel Rodriguez
