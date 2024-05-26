@@ -95,7 +95,7 @@ public class HRDashboard {
 
         JPanel addEmployeePanel = new JPanel(new GridLayout(0, 2));
 
-        // Labels and fields for employee information
+        // Labels and fields for adding employee
         JLabel[] labels = {
                 new JLabel("Employee ID:"),
                 new JLabel("Password:"),
@@ -205,19 +205,19 @@ public class HRDashboard {
 
         deleteEmployeeFrame.getContentPane().add(deleteEmployeePanel);
         deleteEmployeeFrame.pack();
-        deleteEmployeeFrame.setLocationRelativeTo(null); // Center the frame on the screen
+        deleteEmployeeFrame.setLocationRelativeTo(null); // Center the frame on the screen from chatgpt
         deleteEmployeeFrame.setVisible(true);
     }
 
     private static void deleteEmployeeRecord(String employeeID) {
         String csvFile = "lib/Employee_Database.csv";
-        String tempFile = "lib/temp.csv";  // Updated to use consistent path
+        String tempFile = "lib/temp.csv";
         File oldFile = new File(csvFile);
         File newFile = new File(tempFile);
         String line;
         String cvsSplitBy = ",";
 
-        boolean found = false;  // Flag to check if the employee ID was found
+        boolean found = false;  // Flag to check if the employee ID was found from chatgpt
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile));
              PrintWriter pw = new PrintWriter(new FileWriter(tempFile))) {
@@ -227,7 +227,7 @@ public class HRDashboard {
                     pw.println(line);
                     pw.flush();
                 } else {
-                    found = true;  // Employee ID found
+                    found = true;  // Employee ID found from chatgpt
                 }
             }
             if (!found) {
@@ -246,7 +246,7 @@ public class HRDashboard {
                 System.out.println("Failed to delete original file");
             }
         } else {
-            newFile.delete();  // Clean up temp file if employee ID was not found
+            newFile.delete();  // Clean up temp file if employee ID was not found from chatgpt
         }
     }
 }

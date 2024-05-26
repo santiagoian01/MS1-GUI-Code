@@ -5,8 +5,9 @@ public class TimeTracker {
 
     public static double weekHoursTotal(JTextField[] loginFields, JTextField[] logoutFields) {
         double weeklyHoursWorked = 0;
+        int daysWorked = 0; // Track the number of days worked
     
-        for (int day = 0; day < 7; day++) {
+        for (int day = 0; day < 5; day++) { // Iterate over 5 days only
             String timeInString = loginFields[day].getText().trim();
             String timeOutString = logoutFields[day].getText().trim();
     
@@ -17,13 +18,16 @@ public class TimeTracker {
     
             double dailyHoursWorked = calcHoursWorked(timeInString, timeOutString);
             weeklyHoursWorked += dailyHoursWorked;
+            daysWorked++; // Increment the number of days worked
         }
     
-        // Display total hours worked
-        JOptionPane.showMessageDialog(null, "You worked a total of " + weeklyHoursWorked + " hours this week.");
+        // Display total hours worked and the number of days worked
+        JOptionPane.showMessageDialog(null, "You worked a total of " + weeklyHoursWorked + " hours over " + daysWorked + " days this week.");
     
         // Display message based on weekly hours
-        if (weeklyHoursWorked >= 40) {
+        if (daysWorked < 5) {
+            JOptionPane.showMessageDialog(null, "You didn't work a full 5-day week.");
+        } else if (weeklyHoursWorked >= 40) {
             JOptionPane.showMessageDialog(null, "Congratulations! You completed your work week.");
         } else {
             JOptionPane.showMessageDialog(null, "You are lacking hours to achieve the 40-hour work week.");
@@ -56,18 +60,18 @@ public class TimeTracker {
             timeOutMinutes = shiftEnd;
         }
 
-        // 1 hour lunch hindi bayad
+        // Deduct lunch break if applicable
         if (timeOutMinutes >= lunchStart && timeInMinutes <= lunchEnd) {
-            timeOutMinutes -= 60;
+            timeOutMinutes -= 60; // Deduct 1 hour
         }
 
-        // hours work calculator
+        // Calculate hours worked
         double hoursWorked = (timeOutMinutes - timeInMinutes) / 60.0;
 
         return hoursWorked;
     }
 
-    // Converter time string to minuites (galing sa chatgpt)
+    // Converter time string to minutes
     private static int timeConverter(String timeString) {
         String[] timeParts = timeString.split(":");
         int hours = Integer.parseInt(timeParts[0]);

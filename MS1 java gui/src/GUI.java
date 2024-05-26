@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.awt.*;
 
+//Paki Check yung employee database for employee credentials then HR details for HR credentials
+
 public class GUI implements ActionListener {
 
     private static JLabel eidLabel;
